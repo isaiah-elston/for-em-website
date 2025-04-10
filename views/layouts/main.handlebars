@@ -1,0 +1,155 @@
+{{!-- main.handlebars - Main layout template for the forum application --}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For 'Em</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Import Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables for dark blue theme with teal accents */
+    :root {
+      --primary-color: #0d1b2a;    /* Dark blue */
+      --secondary-color: #1b263b;  /* Slightly lighter dark blue */
+      --accent-color: #2ec4b6;     /* Teal accent */
+      --background-color: #141e30; /* Dark background */
+      --text-color: #e0e1dd;       /* Light text for contrast */
+      --white: #ffffff;
+    }
+
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: var(--background-color);
+      color: var(--text-color);
+    }
+
+    /* Header styling */
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: var(--white);
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    header p {
+      margin: 10px 0 0;
+      font-size: 1.3rem;
+      font-weight: 300;
+    }
+
+    /* Updated Navbar styling */
+    nav.navbar {
+      background: var(--secondary-color);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      padding: 10px 20px;
+    }
+    .navbar-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar-container a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .navbar-container a:hover {
+      color: var(--accent-color);
+    }
+    .navbar-container a::after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 2px;
+      background: var(--accent-color);
+      transition: width 0.3s;
+      margin: 0 auto;
+    }
+    .navbar-container a:hover::after {
+      width: 100%;
+    }
+
+    /* Main content container */
+    main {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 25px;
+      background: var(--secondary-color);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Footer styling */
+    footer {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: var(--white);
+      text-align: center;
+      padding: 20px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-size: 0.9rem;
+      box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      .navbar-container a {
+        margin: 0 5px;
+        font-size: 0.95rem;
+      }
+      main {
+        margin: 20px 10px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>For 'Em</h1>
+    <p>The Forum for Them</p>
+  </header>
+  
+  {{!-- Conditionally render navbar unless hideNav is true --}}
+  {{#unless hideNav}}
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="/">Home</a>
+      {{#if session.username}}
+        <a href="/account">My Account</a>
+        <a href="/logout">Logout ({{session.username}})</a>
+      {{else}}
+        <a href="/login">Login</a>
+      {{/if}}
+    </div>
+  </nav>
+  {{/unless}}
+  
+  <main>
+    {{{body}}}
+  </main>
+  
+  <footer>
+    <p>&copy; 2025 Isaiah Elston's Forum App. All rights reserved.</p>
+  </footer>
+</body>
+</html>

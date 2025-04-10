@@ -1,0 +1,49 @@
+{{!-- newPost.handlebars --}}
+<h1>Create New Post</h1>
+<form action="/posts" method="POST">
+  <div class="form-group">
+    <input type="text" name="title" placeholder="Post Title" required>
+  </div>
+  <div class="form-group">
+    <textarea name="content" placeholder="Post Content" required></textarea>
+  </div>
+  <div class="form-group">
+    <button type="submit">Create Post</button>
+  </div>
+</form>
+<p><a href="/">Back to Home</a></p>
+
+<style>
+  .form-group {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 80%;
+    padding: 10px;
+    font-size: 1rem;
+    margin: 0 auto;
+    display: block;
+    border: 1px solid #444;
+    border-radius: 4px;
+  }
+  .form-group button {
+    padding: 10px 20px;
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .form-group button:hover {
+    background: var(--accent-color);
+  }
+  a {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+</style>

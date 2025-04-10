@@ -1,0 +1,410 @@
+{{!-- home.handlebars - Homepage with Inline Create, Edit, and Comment Functionality --}}
+<div class="container">
+  <h1>Welcome, {{username}}!</h1>
+  <p class="tagline">Discuss. Share. Connect. Let your voice be heard.</p>
+
+  <!-- Inline Create New Post Section -->
+  <div class="create-post-section">
+    <button id="toggleCreatePostBtn">Create New Post</button>
+    <div id="createPostFormContainer" style="display: none;">
+      <form action="/posts" method="POST">
+        <div class="form-group">
+          <input type="text" name="title" placeholder="Post Title" required>
+        </div>
+        <div class="form-group">
+          <textarea name="content" placeholder="Post Content" required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Create Post</button>
+          <button type="button" id="cancelCreatePostBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {{#if posts}}
+    <h2>Recent Posts</h2>
+    <ul class="posts-list">
+      {{#each posts}}
+        <li class="post-item" id="post-{{this._id}}">
+          <!-- Post Display Section -->
+          <div class="post-display">
+            <h3 class="post-title">{{this.title}}</h3>
+            <p class="post-content">{{this.content}}</p>
+            <p class="author-info">By <span class="author-name">{{this.author.username}}</span></p>
+            {{#if (eq this.author.username ../username)}}
+              <div class="post-actions">
+                <button class="edit-post-btn" data-postid="{{this._id}}">Edit</button>
+                <form action="/posts/{{this._id}}?_method=DELETE" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                  <button type="submit">Delete</button>
+                </form>
+              </div>
+            {{/if}}
+          </div>
+          
+          <!-- Inline Edit Form for Post (initially hidden) -->
+          <div class="post-edit-form" style="display: none;">
+            <form action="/posts/{{this._id}}?_method=PATCH" method="POST">
+              <div class="form-group">
+                <input type="text" name="title" value="{{this.title}}" required>
+              </div>
+              <div class="form-group">
+                <textarea name="content" required>{{this.content}}</textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit">Save Changes</button>
+                <button type="button" class="cancel-edit-btn" data-postid="{{this._id}}">Cancel</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Comments Section -->
+          <div class="comments-section">
+            <!-- Comment Toggle Button (positioned at bottom right) -->
+            <div class="comment-actions">
+              <button class="toggle-comment-btn" data-postid="{{this._id}}">Comment</button>
+            </div>
+            <!-- Inline Comment Form (initially hidden) -->
+            <div class="comment-form" id="comment-form-{{this._id}}" style="display: none;">
+              <form action="/posts/{{this._id}}/comments" method="POST">
+                <div class="form-group">
+                  <textarea name="content" placeholder="Write a comment..." required></textarea>
+                </div>
+                <div class="form-actions">
+                  <button type="submit">Post Comment</button>
+                  <button type="button" class="cancel-comment-btn" data-postid="{{this._id}}">Cancel</button>
+                </div>
+              </form>
+            </div>
+            <!-- Comments List -->
+            {{#if this.comments}}
+              <ul class="comments-list">
+                {{#each this.comments}}
+                  <li class="comment-item" id="comment-{{this._id}}">
+                    <div class="comment-display">
+                      <p class="comment-content">{{this.content}}</p>
+                      <p class="comment-author">By <span class="comment-author-name">{{this.author.username}}</span></p>
+                      {{#if (eq this.author.username ../../username)}}
+                        <div class="comment-actions">
+                          <button class="edit-comment-btn" data-commentid="{{this._id}}">Edit</button>
+                          <form action="/comments/{{this._id}}?_method=DELETE" method="POST" style="display:inline;" onsubmit="return confirm('Delete this comment?');">
+                            <button type="submit">Delete</button>
+                          </form>
+                        </div>
+                      {{/if}}
+                    </div>
+                    {{#if (eq this.author.username ../../username)}}
+                      <div class="comment-edit-form" id="comment-edit-form-{{this._id}}" style="display: none;">
+                        <form action="/comments/{{this._id}}?_method=PATCH" method="POST">
+                          <div class="form-group">
+                            <textarea name="content" required>{{this.content}}</textarea>
+                          </div>
+                          <div class="form-actions">
+                            <button type="submit">Save</button>
+                            <button type="button" class="cancel-comment-edit-btn" data-commentid="{{this._id}}">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
+                    {{/if}}
+                  </li>
+                {{/each}}
+              </ul>
+            {{/if}}
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p class="no-posts">No posts available. Start by creating your first post!</p>
+  {{/if}}
+
+  <p class="logout-link"><a href="/logout">Logout</a></p>
+</div>
+
+<style>
+  /* Container & Global Styles */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .tagline {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: var(--accent-color);
+  }
+  
+  /* Create New Post Section */
+  .create-post-section {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  #toggleCreatePostBtn {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  }
+  #toggleCreatePostBtn:hover {
+    background: var(--accent-color);
+    transform: scale(1.05);
+  }
+  #createPostFormContainer {
+    margin-top: 20px;
+    background: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    display: inline-block;
+    animation: fadeIn 0.5s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Form Styles */
+  .form-group {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 80%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background: var(--background-color);
+    color: var(--text-color);
+    display: block;
+    margin: 0 auto;
+  }
+  .form-actions {
+    margin-top: 15px;
+  }
+  .form-actions button {
+    margin: 0 8px;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    background: var(--accent-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .form-actions button:hover {
+    background: var(--primary-color);
+    transform: scale(1.05);
+  }
+
+  /* Posts List */
+  .posts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .post-item {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 800px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .post-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+  }
+  .post-title {
+    font-size: 2rem;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .post-content {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin-bottom: 15px;
+  }
+  .author-info {
+    font-size: 1rem;
+    margin-top: 10px;
+    color: var(--white);
+  }
+  .author-name {
+    color: var(--accent-color);
+    font-weight: bold;
+  }
+  .post-actions {
+    margin-top: 10px;
+  }
+  .post-actions button {
+    padding: 6px 12px;
+    margin-right: 10px;
+    font-size: 0.9rem;
+    background: var(--accent-color);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .post-actions button:hover {
+    background: var(--primary-color);
+    transform: scale(1.05);
+  }
+  
+  /* Comments Section */
+  .comments-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+  }
+  .comment-item {
+    margin-bottom: 10px;
+    padding: 8px;
+    background: var(--secondary-color);
+    border-radius: 4px;
+  }
+  .comment-content {
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+  .comment-author {
+    font-size: 0.9rem;
+    color: var(--white);
+  }
+  .comment-author-name {
+    color: var(--accent-color);
+    font-weight: bold;
+  }
+  .comment-actions {
+    margin-top: 5px;
+    text-align: right;
+  }
+  .comment-actions button {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    background: var(--accent-color);
+    color: var(--white);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .comment-actions button:hover {
+    background: var(--primary-color);
+    transform: scale(1.05);
+  }
+  .comment-edit-form {
+    margin-top: 5px;
+    display: none;
+  }
+
+  /* No Posts Message */
+  .no-posts {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 20px;
+    color: var(--accent-color);
+  }
+  /* Logout Link */
+  .logout-link {
+    text-align: center;
+    margin-top: 40px;
+  }
+  .logout-link a {
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  .logout-link a:hover {
+    color: var(--primary-color);
+  }
+</style>
+
+<script>
+  // Toggle Create Post Form visibility
+  document.getElementById('toggleCreatePostBtn').addEventListener('click', function(){
+    document.getElementById('createPostFormContainer').style.display = 'block';
+    this.style.display = 'none';
+  });
+  document.getElementById('cancelCreatePostBtn')?.addEventListener('click', function(){
+    document.getElementById('createPostFormContainer').style.display = 'none';
+    document.getElementById('toggleCreatePostBtn').style.display = 'inline-block';
+  });
+
+  // Inline Edit: Toggle the edit form for a post
+  document.querySelectorAll('.edit-post-btn').forEach(button => {
+    button.addEventListener('click', function(){
+      const postId = this.getAttribute('data-postid');
+      const postItem = document.getElementById('post-' + postId);
+      postItem.querySelector('.post-display').style.display = 'none';
+      postItem.querySelector('.post-edit-form').style.display = 'block';
+    });
+  });
+
+  // Inline Edit: Cancel editing for a post
+  document.querySelectorAll('.cancel-edit-btn').forEach(button => {
+    button.addEventListener('click', function(){
+      const postId = this.getAttribute('data-postid');
+      const postItem = document.getElementById('post-' + postId);
+      postItem.querySelector('.post-edit-form').style.display = 'none';
+      postItem.querySelector('.post-display').style.display = 'block';
+    });
+  });
+
+  // Toggle Comment Form visibility for a post
+  document.querySelectorAll('.toggle-comment-btn').forEach(button => {
+    button.addEventListener('click', function(){
+      const postId = this.getAttribute('data-postid');
+      const commentForm = document.getElementById('comment-form-' + postId);
+      commentForm.style.display = 'block';
+      this.style.display = 'none';
+    });
+  });
+  
+  // Cancel Comment: Hide the comment form and show the comment button again.
+  document.querySelectorAll('.cancel-comment-btn').forEach(button => {
+    button.addEventListener('click', function(){
+      const postId = this.getAttribute('data-postid');
+      const commentForm = document.getElementById('comment-form-' + postId);
+      commentForm.style.display = 'none';
+      document.querySelector('.toggle-comment-btn[data-postid="' + postId + '"]').style.display = 'inline-block';
+    });
+  });
+  
+  // Inline Edit for Comments: Toggle the edit form for a comment
+  document.querySelectorAll('.edit-comment-btn').forEach(button => {
+    button.addEventListener('click', function(){
+      const commentId = this.getAttribute('data-commentid');
+      const commentItem = document.getElementById('comment-' + commentId);
+      commentItem.querySelector('.comment-display').style.display = 'none';
+      commentItem.querySelector('.comment-edit-form').style.display = 'block';
+    });
+  });
+
+  // Cancel Edit for Comments: Hide the edit form and show the normal comment display
+  document.querySelectorAll('.cancel-comment-edit-btn').forEach(button => {
+    button.addEventListener('click', function(){
+      const commentId = this.getAttribute('data-commentid');
+      const commentItem = document.getElementById('comment-' + commentId);
+      commentItem.querySelector('.comment-edit-form').style.display = 'none';
+      commentItem.querySelector('.comment-display').style.display = 'block';
+    });
+  });
+</script>

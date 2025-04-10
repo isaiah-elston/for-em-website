@@ -1,0 +1,35 @@
+{
+  "name": "amp-program1-isaiah-elston",
+  "version": "1.0.0",
+  "description": "Isaiah Elston's programmign assignment #1 for Adv. Mobile Programming",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cosc4735sp25/amp-program1-isaiah-elston.git"
+  },
+  "author": "Isaiah E. Elston",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cosc4735sp25/amp-program1-isaiah-elston/issues"
+  },
+  "homepage": "https://github.com/cosc4735sp25/amp-program1-isaiah-elston#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
+    "method-override": "^3.0.0",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "chai": "^5.2.0",
+    "mocha": "^11.1.0",
+    "supertest": "^7.1.0"
+  }
+}

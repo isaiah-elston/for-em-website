@@ -1,0 +1,74 @@
+{{!-- register.handlebars --}}
+<div class="register-container">
+  <h2>Create an Account</h2>
+  {{#if error}}
+    <div class="error-message">{{error}}</div>
+  {{/if}}
+  <form action="/register" method="POST">
+    <div class="form-group">
+      <input type="text" name="username" placeholder="Choose a Username" required>
+    </div>
+    <div class="form-group">
+      <input type="password" name="password" placeholder="Choose a Password" required>
+    </div>
+    <div class="form-group">
+      <button type="submit">Create Account</button>
+    </div>
+  </form>
+  <p><a href="/login">Back to Login</a></p>
+</div>
+
+<style>
+  .register-container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 30px;
+    background: var(--secondary-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  .register-container h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: var(--text-color);
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: var(--background-color);
+    color: var(--text-color);
+  }
+  .form-group button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    background: var(--primary-color);
+    border: none;
+    color: var(--white);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .form-group button:hover {
+    background: var(--accent-color);
+  }
+  .error-message {
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  a {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+</style>

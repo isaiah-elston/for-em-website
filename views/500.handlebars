@@ -1,0 +1,82 @@
+{{!-- 500.handlebars - Custom 500 Server Error Page --}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>500 - Server Error</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #0d1b2a;
+      --secondary-color: #1b263b;
+      --accent-color: #2ec4b6;
+      --background-color: #141e30;
+      --text-color: #e0e1dd;
+      --white: #ffffff;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: var(--primary-color);
+      color: var(--white);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .error-container {
+      text-align: center;
+      animation: fadeIn 1.5s ease-out;
+      padding: 20px;
+    }
+    .error-container h1 {
+      font-size: 8rem;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      animation: glitch 1s infinite;
+    }
+    .error-container p {
+      font-size: 1.5rem;
+      margin: 20px 0;
+      letter-spacing: 1px;
+    }
+    .error-container a {
+      display: inline-block;
+      padding: 12px 24px;
+      background: var(--accent-color);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .error-container a:hover {
+      background: var(--secondary-color);
+      color: var(--accent-color);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes glitch {
+      0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+      20% { text-shadow: -2px 2px 4px rgba(0,0,0,0.5); }
+      40% { text-shadow: 2px -2px 4px rgba(0,0,0,0.5); }
+      60% { text-shadow: -2px -2px 4px rgba(0,0,0,0.5); }
+      80% { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+      100% { text-shadow: -2px 2px 4px rgba(0,0,0,0.5); }
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <h1>500</h1>
+    <p>Server Error - Oops! Something went wrong on our end.</p>
+    <p>Please try again later or contact support if the issue persists.</p>
+    <a href="/">Go Back Home</a>
+  </div>
+</body>
+</html>
