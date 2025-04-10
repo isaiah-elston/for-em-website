@@ -60,12 +60,12 @@ I opted to record two separate videos to make it clear what I am depicting and h
 
 ### Video 1: Project Walkthrough
 
-![Project Walkthrough](videos/project-one-demo.mov)
+![Project Walkthrough](videos/project-one-demo.mp4)
 
 This video shows the project in action and how it works accessing it from a web-browser. It demonstrates how to create a new account, log in, and create posts and comments. It also shows how to view all posts and comments.
 
 ### Video 2: API Walkthrough
 
-![API Walkthrough](videos/project-one-api-demo.mov)
+![API Walkthrough](videos/project-one-api-demo.mp4)
 
-This video demonstrates all the ReSTful API endpoints via a testing file I made. Please refer to the `tests/apis.test.js` file to see precisely how it works. It spawns a server and uses the `supertest` library to create multiple users. Then, it tests the CRUD operations for the `User`, `Post`, and `Comment` models. The video demonstrates that all tests pass, and then shows that the database was indeed accessed and modified during the test.
+This video demonstrates all the ReSTful API endpoints via a testing file I made. Please refer to the `tests/apis.test.js` file to see precisely how it works. It spawns a server and uses the `supertest` library to create multiple users. Then, it tests the CRUD operations for the `User`, `Post`, and `Comment` models. The video demonstrates that all tests pass and then shows that the database was indeed accessed and modified during the test.
